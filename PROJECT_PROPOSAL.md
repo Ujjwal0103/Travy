@@ -1,28 +1,70 @@
-# Travy - Travel Tracking App
+# Travy
 
-## App Name
-**Travy**
+**Group Members:**  
+- Ujjwal Rastogi  
+- Aadit Shah  
+- Keshav Mohta  
 
-## Group Members
-[Your Name/Names Here]
+---
 
-## App Idea
-Travy is a native iOS travel tracking application that helps users organize and visualize their travel history. The app allows users to record trips, hotels, and cities they've visited, with each entry including dates, locations, notes, and other relevant details. Users can view their travel data in multiple formats: an interactive map showing all locations, a chronological timeline, and organized list views.
+## 🧭 Overview
 
-## Motivation
-Travel enthusiasts often struggle to keep track of all the places they've visited, hotels they've stayed at, and trips they've taken over time. While websites can display this information, a native iOS app provides a superior experience with offline access, native MapKit integration for interactive maps, smooth animations, and seamless data persistence. Travy makes it easy to build a personal travel journal that's always accessible on your device, helping users reminisce about past adventures and plan future travels based on their history.
+**Travy** is a native iOS travel tracking application designed to help users organize and visualize their travel history in a beautiful and intuitive way.  
+With Travy, users can record **hotels** and **cities** they've visited, including **dates, locations, notes, and other details**.  
 
-## Architecture
-The app follows a SwiftUI-based MVVM architecture with SwiftData for persistence. The main views include:
-- **MapView**: Interactive map displaying trips, hotels, and cities as color-coded pins with tap gestures for details
-- **TimelineView**: Chronological view of all travel entries with search and filtering capabilities
-- **CitiesListView** & **HotelsListView**: Organized list views grouped by country with search functionality
-- **Add Views**: Forms for creating new trips, hotels, and cities with autocomplete search integration
+The app offers multiple ways to view travel data — including an **interactive map with pins**, a **chronological timeline**, and **organized list views** — allowing users to reflect on their adventures and plan future travels seamlessly.
 
-Data models (Trip, Hotel, City) use SwiftData's `@Model` annotation for automatic persistence. The app integrates with MapKit's `MKLocalSearch` API for location autocomplete and geocoding services.
+---
 
-## Course Concepts Included
-1. **Gesture Recognition**: Tap gestures on map pins to view details and zoom to locations
-2. **Network Requests**: Integration with MapKit's `MKLocalSearch` API for location autocomplete and geocoding
-3. **Persistent Data Storage**: SwiftData framework for storing trips, hotels, and cities with automatic persistence across app launches
+## 💡 Motivation
 
+The motivation behind Travy comes from the difficulty many travel enthusiasts face when trying to keep track of where they’ve been.  
+
+While there are web tools available, a **native iOS app** offers a much richer experience with:
+- Offline access  
+- Smooth animations  
+- Tight integration with Apple’s **MapKit**
+
+Travy aims to make **travel journaling effortless, personal, and visually engaging.**
+
+---
+
+## 🧩 Core Features
+
+### 🗺️ Interactive MapView
+- Displays hotels and cities as **color-coded pins**  
+- Users can tap on any pin to view details or zoom in on a location  
+
+### 🕒 TimelineView
+- Shows all travel entries in **chronological order**  
+- Includes **filtering** and **search options**
+
+### 🏙️ CitiesListView & HotelsListView
+- Organizes data by **country**
+- Includes **search functionality** for quick access  
+
+### ➕ Add Views
+- Allows users to create new **hotels** and **cities**  
+- Integrates with **autocomplete search** powered by **MapKit’s MKLocalSearch API**
+
+---
+
+## 🔧 Key Technical Concepts
+
+Travy incorporates key course and iOS development concepts such as:
+
+### ✋ Gesture Recognition
+- Supports **map interaction** via taps and zoom gestures  
+
+### 🌐 Network Requests
+- Used for **location autocomplete** and **geocoding** via **Apple’s MapKit API**
+
+### 💾 Persistent Data Storage
+- Implemented through **SwiftData’s `@Model` annotation**, ensuring all user data remains accessible across app sessions  
+
+---
+
+## 🚀 Summary
+
+Travy combines **intuitive UI**, **native performance**, and **data persistence** to make tracking travel history simple, visual, and delightful.  
+It’s the perfect companion for travelers who love exploring new places and keeping their memories organized.
