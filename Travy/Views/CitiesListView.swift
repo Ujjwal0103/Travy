@@ -99,7 +99,8 @@ struct CityDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var showingDeleteAlert = false
-    
+    @State private var showingEditView = false
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -107,12 +108,28 @@ struct CityDetailView: View {
                     Text(city.locationString)
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    
+
                     Label(city.visitDate.formatted(.dateTime.month().day().year()), systemImage: "calendar")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
+
+                // Photo carousel
+                if !city.photoFilenames.isEmpty {
+                    PhotoCarouselView(
+                        photos: city.photoFilenames,
+                        entityId: city.id,
+                        entityType: .city
+                    )
+                    .frame(height: 300)
+                    .cornerRadius(12)
+                }
+
+                // Ratings display
+                if let ratings = city.ratings {
+                    CategoryRatingDisplay(rating: ratings)
+                }
+
                 if !city.highlights.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Highlights")
@@ -124,7 +141,7 @@ struct CityDetailView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(12)
                 }
-                
+
                 if let lat = city.latitude, let lon = city.longitude {
                     CityMapView(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
                         .frame(height: 200)
@@ -136,16 +153,29 @@ struct CityDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(role: .destructive) {
-                    showingDeleteAlert = true
-                } label: {
-                    Image(systemName: "trash")
+                HStack {
+                    Button {
+                        showingEditView = true
+                    } label: {
+                        Text("Edit")
+                    }
+
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Image(systemName: "trash")
+                    }
                 }
             }
+        }
+        .sheet(isPresented: $showingEditView) {
+            EditCityView(city: city)
         }
         .alert("Delete City", isPresented: $showingDeleteAlert) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
+                // Delete all photos first
+                PhotoManager.shared.deleteAllPhotos(for: city.id, type: .city)
                 modelContext.delete(city)
                 dismiss()
             }

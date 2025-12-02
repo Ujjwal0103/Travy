@@ -251,7 +251,7 @@ struct TripTimelineCard: View {
 
 struct HotelTimelineCard: View {
     let hotel: Hotel
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -265,14 +265,26 @@ struct HotelTimelineCard: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
+            // Photo thumbnail if available
+            if let firstPhoto = hotel.photoFilenames.first {
+                ThumbnailImage(
+                    filename: firstPhoto,
+                    entityId: hotel.id,
+                    entityType: .hotel
+                )
+                .frame(height: 150)
+                .frame(maxWidth: .infinity)
+                .cornerRadius(8)
+            }
+
             Text(hotel.name)
                 .font(.headline)
-            
+
             Text(hotel.locationString)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
-            
+
             HStack {
                 Text(hotel.stayDescription)
                     .font(.subheadline)
@@ -298,7 +310,7 @@ struct HotelTimelineCard: View {
 
 struct CityTimelineCard: View {
     let city: City
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -312,10 +324,34 @@ struct CityTimelineCard: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
+            // Photo thumbnail if available
+            if let firstPhoto = city.photoFilenames.first {
+                ThumbnailImage(
+                    filename: firstPhoto,
+                    entityId: city.id,
+                    entityType: .city
+                )
+                .frame(height: 150)
+                .frame(maxWidth: .infinity)
+                .cornerRadius(8)
+            }
+
             Text(city.locationString)
                 .font(.headline)
-            
+
+            // Show average rating if available
+            if let ratings = city.ratings, let avgRating = ratings.averageRating {
+                HStack(spacing: 4) {
+                    Image(systemName: "star.fill")
+                        .foregroundColor(.yellow)
+                        .font(.caption)
+                    Text(String(format: "%.1f", avgRating))
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
+                }
+            }
+
             if !city.highlights.isEmpty {
                 Text(city.highlights)
                     .font(.subheadline)

@@ -26,6 +26,7 @@ struct AddHotelView: View {
     @State private var favoriteAspects = ""
     @State private var latitude: Double? = nil
     @State private var longitude: Double? = nil
+    @State private var selectedPhotos: [UIImage] = []
     
     var body: some View {
         NavigationStack {
@@ -92,11 +93,16 @@ struct AddHotelView: View {
                             Text("\(rating) star\(rating == 1 ? "" : "s")").tag(Int?.some(rating))
                         }
                     }
-                    
+
                     TextField("Amenities (comma separated)", text: $amenities)
                     TextField("Notes", text: $notes, axis: .vertical)
                         .lineLimit(3...6)
                     TextField("Favorite Aspects", text: $favoriteAspects)
+                }
+
+                Section("Photos") {
+                    PhotoPickerButton(photos: $selectedPhotos, maxPhotos: 10)
+                    PhotoGridView(photos: $selectedPhotos)
                 }
             }
             .navigationTitle("Add Hotel")
@@ -138,6 +144,14 @@ struct AddHotelView: View {
             latitude: latitude,
             longitude: longitude
         )
+
+        // Save photos and get filenames
+        for photo in selectedPhotos {
+            if let filename = PhotoManager.shared.savePhoto(image: photo, for: hotel.id, type: .hotel) {
+                hotel.photoFilenames.append(filename)
+            }
+        }
+
         modelContext.insert(hotel)
         dismiss()
     }

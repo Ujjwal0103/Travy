@@ -68,3 +68,4 @@ Travy incorporates key course and iOS development concepts such as:
 
 Travy combines **intuitive UI**, **native performance**, and **data persistence** to make tracking travel history simple, visual, and delightful.  
 It’s the perfect companion for travelers who love exploring new places and keeping their memories organized.
+

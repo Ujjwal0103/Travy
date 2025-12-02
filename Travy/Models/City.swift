@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class City {
+final class City: Identifiable {
     var id: UUID
     var name: String
     var country: String
@@ -18,7 +18,13 @@ final class City {
     var latitude: Double?
     var longitude: Double?
     var createdAt: Date
-    
+
+    // Photo support
+    var photoFilenames: [String]
+
+    // Rating support (stored as encoded Data)
+    var ratingsData: Data?
+
     init(
         name: String,
         country: String,
@@ -35,12 +41,26 @@ final class City {
         self.latitude = latitude
         self.longitude = longitude
         self.createdAt = Date()
+        self.photoFilenames = []
+        self.ratingsData = nil
     }
-    
+
     var locationString: String {
         "\(name), \(country)"
     }
+
+    // Computed property for easy access to ratings
+    var ratings: CityRating? {
+        get {
+            guard let data = ratingsData else { return nil }
+            return try? JSONDecoder().decode(CityRating.self, from: data)
+        }
+        set {
+            ratingsData = try? JSONEncoder().encode(newValue)
+        }
+    }
 }
+
 
 
 

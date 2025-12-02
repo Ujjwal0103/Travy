@@ -21,6 +21,8 @@ struct AddCityView: View {
     @State private var highlights = ""
     @State private var latitude: Double? = nil
     @State private var longitude: Double? = nil
+    @State private var selectedPhotos: [UIImage] = []
+    @State private var cityRating = CityRating()
     
     var body: some View {
         NavigationStack {
@@ -78,6 +80,15 @@ struct AddCityView: View {
                     TextField("What made this visit special?", text: $highlights, axis: .vertical)
                         .lineLimit(3...6)
                 }
+
+                Section("Photos") {
+                    PhotoPickerButton(photos: $selectedPhotos, maxPhotos: 10)
+                    PhotoGridView(photos: $selectedPhotos)
+                }
+
+                Section("Ratings") {
+                    CategoryRatingInput(rating: $cityRating)
+                }
             }
             .navigationTitle("Add City")
             .navigationBarTitleDisplayMode(.inline)
@@ -113,6 +124,19 @@ struct AddCityView: View {
             latitude: latitude,
             longitude: longitude
         )
+
+        // Save photos and get filenames
+        for photo in selectedPhotos {
+            if let filename = PhotoManager.shared.savePhoto(image: photo, for: city.id, type: .city) {
+                city.photoFilenames.append(filename)
+            }
+        }
+
+        // Save rating if any category is rated
+        if cityRating.hasAnyRating {
+            city.ratings = cityRating
+        }
+
         modelContext.insert(city)
         dismiss()
     }

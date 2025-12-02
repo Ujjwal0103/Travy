@@ -23,7 +23,10 @@ final class Hotel {
     var latitude: Double?
     var longitude: Double?
     var createdAt: Date
-    
+
+    // Photo support
+    var photoFilenames: [String]
+
     init(
         name: String,
         city: String,
@@ -50,6 +53,7 @@ final class Hotel {
         self.latitude = latitude
         self.longitude = longitude
         self.createdAt = Date()
+        self.photoFilenames = []
     }
     
     var nights: Int {
@@ -64,6 +68,9 @@ final class Hotel {
         "\(nights) night\(nights == 1 ? "" : "s") — \(city), \(checkInDate.formatted(.dateTime.year()))"
     }
 }
+
+
+
 
 
 

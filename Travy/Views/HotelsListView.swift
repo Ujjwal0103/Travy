@@ -107,7 +107,8 @@ struct HotelDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var showingDeleteAlert = false
-    
+    @State private var showingEditView = false
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -115,11 +116,11 @@ struct HotelDetailView: View {
                     Text(hotel.name)
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    
+
                     Text(hotel.locationString)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                    
+
                     HStack {
                         Label(hotel.checkInDate.formatted(.dateTime.month().day().year()), systemImage: "calendar")
                         Text("→")
@@ -127,11 +128,11 @@ struct HotelDetailView: View {
                     }
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-                    
+
                     Text(hotel.stayDescription)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     if let rating = hotel.starRating {
                         HStack(spacing: 2) {
                             ForEach(0..<rating, id: \.self) { _ in
@@ -141,7 +142,18 @@ struct HotelDetailView: View {
                         }
                     }
                 }
-                
+
+                // Photo carousel
+                if !hotel.photoFilenames.isEmpty {
+                    PhotoCarouselView(
+                        photos: hotel.photoFilenames,
+                        entityId: hotel.id,
+                        entityType: .hotel
+                    )
+                    .frame(height: 300)
+                    .cornerRadius(12)
+                }
+
                 if !hotel.amenities.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Amenities")
@@ -153,7 +165,7 @@ struct HotelDetailView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(12)
                 }
-                
+
                 if !hotel.notes.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Notes")
@@ -165,7 +177,7 @@ struct HotelDetailView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(12)
                 }
-                
+
                 if !hotel.favoriteAspects.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Favorite Aspects")
@@ -177,7 +189,7 @@ struct HotelDetailView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(12)
                 }
-                
+
                 if let lat = hotel.latitude, let lon = hotel.longitude {
                     HotelMapView(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
                         .frame(height: 200)
@@ -189,16 +201,29 @@ struct HotelDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(role: .destructive) {
-                    showingDeleteAlert = true
-                } label: {
-                    Image(systemName: "trash")
+                HStack {
+                    Button {
+                        showingEditView = true
+                    } label: {
+                        Text("Edit")
+                    }
+
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Image(systemName: "trash")
+                    }
                 }
             }
+        }
+        .sheet(isPresented: $showingEditView) {
+            EditHotelView(hotel: hotel)
         }
         .alert("Delete Hotel", isPresented: $showingDeleteAlert) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
+                // Delete all photos first
+                PhotoManager.shared.deleteAllPhotos(for: hotel.id, type: .hotel)
                 modelContext.delete(hotel)
                 dismiss()
             }
