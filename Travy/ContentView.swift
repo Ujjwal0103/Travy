@@ -35,6 +35,12 @@ struct ContentView: View {
                     Label("Hotels", systemImage: "bed.double")
                 }
                 .tag(3)
+
+            StatisticsView()
+                .tabItem {
+                    Label("Statistics", systemImage: "chart.bar.fill")
+                }
+                .tag(4)
         }
     }
 }
