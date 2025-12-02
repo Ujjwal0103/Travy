@@ -114,6 +114,51 @@ struct CityDetailView: View {
                         .foregroundColor(.secondary)
                 }
 
+                if let lat = city.latitude, let lon = city.longitude {
+                    VStack(alignment: .leading, spacing: 12) {
+                        // Coordinates display
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Coordinates")
+                                .font(.headline)
+                            HStack(spacing: 16) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Latitude")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(String(format: "%.6f", lat))
+                                        .font(.system(.body, design: .monospaced))
+                                }
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Longitude")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(String(format: "%.6f", lon))
+                                        .font(.system(.body, design: .monospaced))
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                        
+                        // Map view
+                        CityMapView(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
+                            .frame(height: 200)
+                            .cornerRadius(12)
+                    }
+                } else {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Location")
+                            .font(.headline)
+                        Text("Coordinates not available")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                }
+
                 // Photo carousel
                 if !city.photoFilenames.isEmpty {
                     PhotoCarouselView(
@@ -141,12 +186,6 @@ struct CityDetailView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(12)
                 }
-
-                if let lat = city.latitude, let lon = city.longitude {
-                    CityMapView(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
-                        .frame(height: 200)
-                        .cornerRadius(12)
-                }
             }
             .padding()
         }
@@ -157,7 +196,7 @@ struct CityDetailView: View {
                     Button {
                         showingEditView = true
                     } label: {
-                        Text("Edit")
+                        Image(systemName: "pencil")
                     }
 
                     Button(role: .destructive) {

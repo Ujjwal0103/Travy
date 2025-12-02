@@ -341,9 +341,11 @@ struct MapView: View {
                     zoomToHotel(hotel)
                 }
             }
-            .navigationTitle("Travel Globe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    AdaptiveTitleView(text: "Travel Globe")
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         resetToGlobe()
@@ -503,9 +505,15 @@ struct TripDetailCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(trip.locationString)
+            Text(trip.name)
                 .font(.title2)
                 .fontWeight(.bold)
+            
+            if !trip.cities.isEmpty {
+                Text(trip.locationString)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
             
             HStack {
                 Label(trip.startDate.formatted(.dateTime.month().day().year()), systemImage: "calendar")
@@ -537,6 +545,25 @@ struct TripDetailCard: View {
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(radius: 2)
+    }
+}
+
+// Adaptive title view that changes color based on background
+struct AdaptiveTitleView: View {
+    let text: String
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        Text(text)
+            .font(.headline)
+            .foregroundStyle(.primary)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background {
+                // Use a material background that adapts to the map
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(.ultraThinMaterial)
+            }
     }
 }
 

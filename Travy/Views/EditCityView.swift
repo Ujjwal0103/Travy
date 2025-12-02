@@ -152,6 +152,13 @@ struct EditCityView: View {
             city.ratingsData = nil
         }
 
+        // Explicitly save the context
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to save city changes: \(error)")
+        }
+        
         dismiss()
     }
 }

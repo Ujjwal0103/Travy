@@ -12,6 +12,7 @@ import MapKit
 struct AddHotelView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Query private var allCities: [City]
     
     @StateObject private var autocompleteService = AutocompleteService()
     @State private var searchText = ""
@@ -131,6 +132,25 @@ struct AddHotelView: View {
     }
     
     private func saveHotel() {
+        // Check if city exists, if not create it
+        let cityExists = allCities.contains { existingCity in
+            existingCity.name.lowercased() == city.lowercased() &&
+            existingCity.country.lowercased() == country.lowercased()
+        }
+        
+        if !cityExists {
+            // Create a new city for this hotel
+            let newCity = City(
+                name: city,
+                country: country,
+                visitDate: checkInDate, // Use hotel check-in date as visit date
+                highlights: "",
+                latitude: latitude,
+                longitude: longitude
+            )
+            modelContext.insert(newCity)
+        }
+        
         let hotel = Hotel(
             name: name,
             city: city,
@@ -153,6 +173,14 @@ struct AddHotelView: View {
         }
 
         modelContext.insert(hotel)
+        
+        // Explicitly save the context
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to save hotel: \(error)")
+        }
+        
         dismiss()
     }
 }

@@ -57,7 +57,7 @@ Travy incorporates key course and iOS development concepts such as:
 - Supports **map interaction** via taps and zoom gestures  
 
 ### 🌐 Network Requests
-- Used for **location autocomplete** and **geocoding** via **Apple’s MapKit API**
+- Used for **location autocomplete** and **geocoding** via **Apple’s MapKit API** and **Nomantim's geocoding API**
 
 ### 💾 Persistent Data Storage
 - Implemented through **SwiftData’s `@Model` annotation**, ensuring all user data remains accessible across app sessions  

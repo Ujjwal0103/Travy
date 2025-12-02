@@ -164,6 +164,13 @@ struct EditHotelView: View {
             }
         }
 
+        // Explicitly save the context
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to save hotel changes: \(error)")
+        }
+        
         dismiss()
     }
 }

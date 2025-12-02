@@ -205,7 +205,7 @@ struct HotelDetailView: View {
                     Button {
                         showingEditView = true
                     } label: {
-                        Text("Edit")
+                        Image(systemName: "pencil")
                     }
 
                     Button(role: .destructive) {

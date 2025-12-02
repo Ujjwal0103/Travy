@@ -11,38 +11,32 @@ import SwiftData
 @Model
 final class Trip {
     var id: UUID
-    var city: String
-    var country: String
+    var name: String
     var startDate: Date
     var endDate: Date
     var notes: String
     var travelTag: String // "Business", "Vacation", "Conference", etc.
+    var cities: [City]
     var hotels: [Hotel]
-    var latitude: Double?
-    var longitude: Double?
     var createdAt: Date
     
     init(
-        city: String,
-        country: String,
+        name: String,
         startDate: Date,
         endDate: Date,
         notes: String = "",
         travelTag: String = "Vacation",
-        hotels: [Hotel] = [],
-        latitude: Double? = nil,
-        longitude: Double? = nil
+        cities: [City] = [],
+        hotels: [Hotel] = []
     ) {
         self.id = UUID()
-        self.city = city
-        self.country = country
+        self.name = name
         self.startDate = startDate
         self.endDate = endDate
         self.notes = notes
         self.travelTag = travelTag
+        self.cities = cities
         self.hotels = hotels
-        self.latitude = latitude
-        self.longitude = longitude
         self.createdAt = Date()
     }
     
@@ -51,7 +45,13 @@ final class Trip {
     }
     
     var locationString: String {
-        "\(city), \(country)"
+        if cities.isEmpty {
+            return "No cities"
+        } else if cities.count == 1 {
+            return cities[0].locationString
+        } else {
+            return "\(cities.count) cities"
+        }
     }
 }
 
